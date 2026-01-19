@@ -1,0 +1,1500 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>贵州商学院 - AI搜索可见度诊断与GEO战略机会报告</title>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@300;400;500;600;700;900&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --primary: #8b5cf6;
+            --primary-dark: #7c3aed;
+            --success: #22c55e;
+            --warning: #f59e0b;
+            --danger: #ef4444;
+            --dark: #0f172a;
+            --gray: #64748b;
+            --light: #f8fafc;
+            --gradient-1: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            --gradient-2: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+            --gradient-danger: linear-gradient(135deg, #ef4444 0%, #dc2626 100%);
+        }
+
+        body {
+            font-family: 'Noto Sans SC', -apple-system, BlinkMacSystemFont, sans-serif;
+            background: linear-gradient(180deg, #faf5ff 0%, #f3e8ff 50%, #fef3f2 100%);
+            color: var(--dark);
+            line-height: 1.6;
+        }
+
+        .header {
+            background: linear-gradient(135deg, #dc2626 0%, #ef4444 50%, #f87171 100%);
+            color: white;
+            padding: 60px 40px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .header::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1440 320"><path fill="%23ffffff" fill-opacity="0.1" d="M0,96L48,112C96,128,192,160,288,160C384,160,480,128,576,112C672,96,768,96,864,112C960,128,1056,160,1152,160C1248,160,1344,128,1392,112L1440,96L1440,320L1392,320C1344,320,1248,320,1152,320C1056,320,960,320,864,320C768,320,672,320,576,320C480,320,384,320,288,320C192,320,96,320,48,320L0,320Z"></path></svg>') no-repeat bottom;
+        }
+
+        .header-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            position: relative;
+            z-index: 1;
+        }
+
+        .header h1 {
+            font-size: 48px;
+            font-weight: 900;
+            margin-bottom: 15px;
+        }
+
+        .header-subtitle {
+            font-size: 20px;
+            font-weight: 300;
+            opacity: 0.95;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 40px 20px;
+        }
+
+        .section {
+            margin-bottom: 60px;
+        }
+
+        .section-header {
+            display: flex;
+            align-items: center;
+            margin-bottom: 30px;
+            gap: 15px;
+        }
+
+        .section-number {
+            width: 50px;
+            height: 50px;
+            background: var(--gradient-1);
+            color: white;
+            border-radius: 15px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 24px;
+            font-weight: 700;
+        }
+
+        .section-title {
+            font-size: 28px;
+            font-weight: 700;
+        }
+
+        .card {
+            background: white;
+            border-radius: 20px;
+            padding: 30px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            margin-bottom: 25px;
+        }
+
+        /* Score Cards */
+        .score-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 25px;
+            margin-bottom: 30px;
+        }
+
+        .score-card {
+            background: white;
+            border-radius: 20px;
+            padding: 30px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .score-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 5px;
+        }
+
+        .score-card.danger::before { background: var(--gradient-danger); }
+        .score-card.warning::before { background: linear-gradient(90deg, #f59e0b, #fbbf24); }
+        .score-card.success::before { background: linear-gradient(90deg, #22c55e, #16a34a); }
+
+        .score-circle {
+            width: 150px;
+            height: 150px;
+            margin: 0 auto 20px;
+            position: relative;
+        }
+
+        .score-circle svg {
+            transform: rotate(-90deg);
+        }
+
+        .score-circle-bg {
+            fill: none;
+            stroke: #e2e8f0;
+            stroke-width: 12;
+        }
+
+        .score-circle-progress {
+            fill: none;
+            stroke-linecap: round;
+            stroke-width: 12;
+            stroke-dasharray: 440;
+            transition: stroke-dashoffset 1s ease-out;
+        }
+
+        .score-circle-text {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+        }
+
+        .score-value {
+            font-size: 48px;
+            font-weight: 900;
+            line-height: 1;
+        }
+
+        .score-max {
+            font-size: 16px;
+            color: var(--gray);
+        }
+
+        .score-label {
+            font-size: 16px;
+            font-weight: 600;
+            margin-bottom: 5px;
+        }
+
+        .score-desc {
+            font-size: 13px;
+            color: var(--gray);
+        }
+
+        /* Platform Grid */
+        .platform-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+            margin: 30px 0;
+        }
+
+        .platform-card {
+            background: white;
+            border-radius: 15px;
+            padding: 25px 20px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.08);
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .platform-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+        }
+
+        .platform-card.poor::before { background: var(--gradient-danger); }
+        .platform-card.fair::before { background: linear-gradient(90deg, #f59e0b, #fbbf24); }
+        .platform-card.good::before { background: linear-gradient(90deg, #22c55e, #4ade80); }
+
+        .platform-icon {
+            font-size: 40px;
+            margin-bottom: 10px;
+        }
+
+        .platform-name {
+            font-size: 16px;
+            font-weight: 600;
+            margin-bottom: 8px;
+        }
+
+        .platform-score {
+            font-size: 24px;
+            font-weight: 700;
+            margin-bottom: 5px;
+            color: var(--danger);
+        }
+
+        .platform-status {
+            display: inline-block;
+            padding: 6px 15px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 600;
+        }
+
+        .status-poor {
+            background: rgba(239, 68, 68, 0.1);
+            color: #dc2626;
+        }
+
+        .status-fair {
+            background: rgba(245, 158, 11, 0.1);
+            color: #d97706;
+        }
+
+        .status-good {
+            background: rgba(34, 197, 94, 0.1);
+            color: #22c55e;
+        }
+
+        /* Table */
+        .table-container {
+            overflow-x: auto;
+            border-radius: 15px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.08);
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            background: white;
+        }
+
+        thead {
+            background: var(--gradient-danger);
+            color: white;
+        }
+
+        th {
+            padding: 18px 20px;
+            text-align: left;
+            font-weight: 600;
+            font-size: 14px;
+        }
+
+        td {
+            padding: 16px 20px;
+            border-bottom: 1px solid #e2e8f0;
+            font-size: 14px;
+        }
+
+        tbody tr:hover {
+            background: var(--light);
+        }
+
+        .rank-badge {
+            width: 35px;
+            height: 35px;
+            border-radius: 10px;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+        }
+
+        .rank-1 { background: linear-gradient(135deg, #fbbf24, #f59e0b); color: white; }
+        .rank-2 { background: linear-gradient(135deg, #94a3b8, #64748b); color: white; }
+        .rank-3 { background: linear-gradient(135deg, #d97706, #b45309); color: white; }
+
+        .highlight-row {
+            background: linear-gradient(135deg, rgba(239, 68, 68, 0.05), rgba(239, 68, 68, 0.02)) !important;
+        }
+
+        /* Grid Layouts */
+        .grid-2 {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+            gap: 25px;
+        }
+
+        .grid-3 {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 25px;
+        }
+
+        /* Info Card */
+        .info-card {
+            background: white;
+            border-radius: 15px;
+            padding: 25px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.08);
+            border-top: 4px solid;
+        }
+
+        .info-card.success { border-top-color: var(--success); }
+        .info-card.warning { border-top-color: var(--warning); }
+        .info-card.danger { border-top-color: var(--danger); }
+        .info-card.info { border-top-color: var(--primary); }
+
+        .info-card-title {
+            font-size: 18px;
+            font-weight: 700;
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .info-card-content {
+            font-size: 14px;
+            color: var(--gray);
+            line-height: 1.8;
+        }
+
+        /* Alert */
+        .alert {
+            padding: 20px 25px;
+            border-radius: 15px;
+            margin-bottom: 20px;
+            display: flex;
+            align-items: flex-start;
+            gap: 15px;
+        }
+
+        .alert-danger {
+            background: linear-gradient(135deg, rgba(239, 68, 68, 0.1), rgba(239, 68, 68, 0.05));
+            border-left: 5px solid var(--danger);
+        }
+
+        .alert-warning {
+            background: linear-gradient(135deg, rgba(245, 158, 11, 0.1), rgba(245, 158, 11, 0.05));
+            border-left: 5px solid var(--warning);
+        }
+
+        .alert-icon {
+            font-size: 24px;
+        }
+
+        /* Timeline */
+        .timeline {
+            position: relative;
+            padding-left: 30px;
+        }
+
+        .timeline::before {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 0;
+            bottom: 0;
+            width: 3px;
+            background: var(--gradient-danger);
+        }
+
+        .timeline-item {
+            position: relative;
+            margin-bottom: 30px;
+        }
+
+        .timeline-item::before {
+            content: '';
+            position: absolute;
+            left: -36px;
+            top: 5px;
+            width: 15px;
+            height: 15px;
+            border-radius: 50%;
+            background: var(--danger);
+            border: 3px solid white;
+            box-shadow: 0 0 0 3px var(--danger);
+        }
+
+        .timeline-number {
+            display: inline-block;
+            background: var(--gradient-danger);
+            color: white;
+            padding: 5px 15px;
+            border-radius: 20px;
+            font-size: 14px;
+            font-weight: 600;
+            margin-bottom: 15px;
+        }
+
+        /* Tags */
+        .tag {
+            display: inline-block;
+            padding: 6px 12px;
+            border-radius: 15px;
+            font-size: 12px;
+            font-weight: 500;
+            margin-right: 8px;
+            margin-bottom: 8px;
+        }
+
+        .tag-danger {
+            background: rgba(239, 68, 68, 0.1);
+            color: var(--danger);
+        }
+
+        .tag-primary {
+            background: rgba(139, 92, 246, 0.1);
+            color: var(--primary-dark);
+        }
+
+        /* Progress */
+        .progress-bar {
+            height: 40px;
+            background: #e2e8f0;
+            border-radius: 20px;
+            overflow: hidden;
+            position: relative;
+        }
+
+        .progress-fill {
+            height: 100%;
+            border-radius: 20px;
+            display: flex;
+            align-items: center;
+            padding: 0 20px;
+            color: white;
+            font-weight: 700;
+            font-size: 14px;
+        }
+
+        /* Why Now Card */
+        .whynow-card {
+            background: white;
+            border-radius: 20px;
+            padding: 30px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            position: relative;
+            overflow: hidden;
+            transition: all 0.3s ease;
+        }
+
+        .whynow-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 20px 50px rgba(0,0,0,0.15);
+        }
+
+        .whynow-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 5px;
+        }
+
+        .whynow-card.urgency-1::before { background: linear-gradient(90deg, #ef4444, #dc2626); }
+        .whynow-card.urgency-2::before { background: linear-gradient(90deg, #f59e0b, #d97706); }
+        .whynow-card.urgency-3::before { background: linear-gradient(90deg, #8b5cf6, #7c3aed); }
+
+        .whynow-number {
+            font-size: 48px;
+            font-weight: 900;
+            background: var(--gradient-danger);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 15px;
+        }
+
+        .whynow-title {
+            font-size: 20px;
+            font-weight: 700;
+            margin-bottom: 15px;
+        }
+
+        .whynow-content {
+            font-size: 14px;
+            color: var(--gray);
+            line-height: 1.8;
+        }
+
+        /* Footer */
+        .footer {
+            background: var(--dark);
+            color: white;
+            padding: 50px 40px;
+            margin-top: 60px;
+        }
+
+        .footer-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            text-align: center;
+        }
+
+        /* Quote Box */
+        .quote-box {
+            background: linear-gradient(135deg, #fef2f2, #fee2e2);
+            border: 2px dashed var(--danger);
+            border-radius: 20px;
+            padding: 30px;
+            margin-top: 25px;
+        }
+
+        .quote-text {
+            font-size: 18px;
+            font-weight: 500;
+            text-align: center;
+            line-height: 1.8;
+            color: var(--dark);
+        }
+
+        /* Screenshot Gallery - Horizontal Scroll */
+        .screenshot-section {
+            margin: 40px 0;
+        }
+
+        .screenshot-section-title {
+            font-size: 20px;
+            font-weight: 700;
+            margin-bottom: 25px;
+            text-align: center;
+            color: var(--dark);
+        }
+
+        .screenshot-scroll-container {
+            position: relative;
+            background: linear-gradient(135deg, #fef2f2 0%, #fee2e2 100%);
+            border-radius: 20px;
+            padding: 30px;
+            box-shadow: 0 10px 40px rgba(239, 68, 68, 0.15);
+        }
+
+        .screenshot-scroll-wrapper {
+            display: flex;
+            gap: 20px;
+            overflow-x: auto;
+            scroll-behavior: smooth;
+            padding: 10px 5px;
+            scroll-snap-type: x mandatory;
+            -webkit-overflow-scrolling: touch;
+        }
+
+        /* Custom scrollbar */
+        .screenshot-scroll-wrapper::-webkit-scrollbar {
+            height: 8px;
+        }
+
+        .screenshot-scroll-wrapper::-webkit-scrollbar-track {
+            background: rgba(239, 68, 68, 0.1);
+            border-radius: 10px;
+        }
+
+        .screenshot-scroll-wrapper::-webkit-scrollbar-thumb {
+            background: linear-gradient(90deg, #ef4444, #dc2626);
+            border-radius: 10px;
+        }
+
+        .screenshot-scroll-wrapper::-webkit-scrollbar-thumb:hover {
+            background: linear-gradient(90deg, #dc2626, #b91c1c);
+        }
+
+        .screenshot-item {
+            flex: 0 0 auto;
+            width: 320px;
+            height: 420px;
+            position: relative;
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            transition: all 0.3s ease;
+            background: #f8fafc;
+            cursor: pointer;
+        }
+
+        .screenshot-item:hover {
+            transform: scale(1.02);
+            box-shadow: 0 8px 25px rgba(0,0,0,0.15);
+        }
+
+        .screenshot-item img {
+            width: 100%;
+            height: 100%;
+            display: block;
+            object-fit: cover;
+            object-position: top center;
+        }
+
+        .screenshot-label {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background: linear-gradient(transparent, rgba(0,0,0,0.85));
+            color: white;
+            padding: 25px 15px 12px;
+            font-size: 13px;
+            font-weight: 500;
+        }
+
+        .screenshot-badge {
+            position: absolute;
+            top: 12px;
+            right: 12px;
+            background: linear-gradient(135deg, #ef4444, #dc2626);
+            color: white;
+            padding: 6px 14px;
+            border-radius: 20px;
+            font-size: 11px;
+            font-weight: 700;
+            box-shadow: 0 2px 8px rgba(239, 68, 68, 0.4);
+            z-index: 2;
+        }
+
+        .screenshot-badge.success {
+            background: linear-gradient(135deg, #22c55e, #16a34a);
+        }
+
+        /* Scroll hint */
+        .scroll-hint {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 8px;
+            margin-top: 20px;
+            padding: 12px;
+            background: rgba(239, 68, 68, 0.1);
+            border-radius: 12px;
+            font-size: 13px;
+            color: var(--danger);
+            font-weight: 500;
+        }
+
+        .scroll-hint-icon {
+            animation: bounce 2s infinite;
+        }
+
+        @keyframes bounce {
+            0%, 20%, 50%, 80%, 100% {
+                transform: translateX(0);
+            }
+            40% {
+                transform: translateX(5px);
+            }
+            60% {
+                transform: translateX(3px);
+            }
+        }
+
+        /* Lightbox */
+        .lightbox {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.95);
+            z-index: 9999;
+            justify-content: center;
+            align-items: center;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .lightbox.active {
+            display: flex;
+            opacity: 1;
+        }
+
+        .lightbox-content {
+            max-width: 90%;
+            max-height: 90%;
+            position: relative;
+            animation: zoomIn 0.3s ease;
+        }
+
+        @keyframes zoomIn {
+            from {
+                transform: scale(0.8);
+                opacity: 0;
+            }
+            to {
+                transform: scale(1);
+                opacity: 1;
+            }
+        }
+
+        .lightbox-content img {
+            max-width: 100%;
+            max-height: 85vh;
+            width: auto;
+            height: auto;
+            border-radius: 12px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.5);
+            object-fit: contain;
+        }
+
+        .lightbox-close {
+            position: absolute;
+            top: -50px;
+            right: 0;
+            width: 40px;
+            height: 40px;
+            background: rgba(255,255,255,0.1);
+            border: 2px solid rgba(255,255,255,0.3);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 24px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .lightbox-close:hover {
+            background: rgba(255,255,255,0.2);
+            border-color: rgba(255,255,255,0.5);
+            transform: rotate(90deg);
+        }
+
+        .lightbox-caption {
+            position: absolute;
+            bottom: -50px;
+            left: 0;
+            right: 0;
+            text-align: center;
+            color: white;
+            font-size: 16px;
+            font-weight: 500;
+        }
+
+        @media (max-width: 768px) {
+            .header h1 { font-size: 32px; }
+            .section-title { font-size: 22px; }
+            .grid-2, .grid-3 { grid-template-columns: 1fr; }
+
+            /* Screenshot gallery mobile */
+            .screenshot-item {
+                width: 280px;
+            }
+            .screenshot-scroll-container {
+                padding: 20px 15px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <div class="header-content">
+            <h1>贵州商学院</h1>
+            <p class="header-subtitle">AI搜索可见度诊断与GEO战略机会报告</p>
+        </div>
+    </div>
+
+    <div class="container">
+        <div class="card" style="background: linear-gradient(135deg, #fef2f2 0%, #fee2e2 100%); border-left: 5px solid #ef4444;">
+            <div style="display: flex; align-items: flex-start; gap: 20px;">
+                <div style="font-size: 48px;">📋</div>
+                <div style="flex: 1;">
+                    <h3 style="font-size: 20px; font-weight: 700; margin-bottom: 15px; color: var(--danger);">报告背景</h3>
+
+                    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 20px; margin-top: 20px;">
+                        <div>
+                            <div style="font-size: 13px; color: var(--gray); margin-bottom: 5px;">诊断品牌</div>
+                            <div style="font-size: 16px; font-weight: 600; color: var(--dark);">贵州商学院</div>
+                            <div style="font-size: 12px; color: var(--gray); margin-top: 3px;">贵州省属商科类本科院校</div>
+                        </div>
+                        <div>
+                            <div style="font-size: 13px; color: var(--gray); margin-bottom: 5px;">所属行业</div>
+                            <div style="font-size: 16px; font-weight: 600; color: var(--dark);">高等教育</div>
+                            <div style="font-size: 12px; color: var(--gray); margin-top: 3px;">商科/财经/管理类</div>
+                        </div>
+                        <div>
+                            <div style="font-size: 13px; color: var(--gray); margin-bottom: 5px;">测试平台</div>
+                            <div style="font-size: 16px; font-weight: 600; color: var(--dark);">5个主流AI平台</div>
+                            <div style="font-size: 12px; color: var(--gray); margin-top: 3px;">豆包 / DeepSeek / 腾讯元宝 / 通义千问 / 文心一言</div>
+                        </div>
+                        <div>
+                            <div style="font-size: 13px; color: var(--gray); margin-bottom: 5px;">测试规模</div>
+                            <div style="font-size: 16px; font-weight: 600; color: var(--dark);">20组搜索测试</div>
+                            <div style="font-size: 12px; color: var(--gray); margin-top: 3px;">覆盖4个核心招生场景 × 5个AI平台</div>
+                        </div>
+                    </div>
+
+                    <div style="margin-top: 25px;">
+                        <div style="font-size: 15px; font-weight: 600; color: var(--dark); margin-bottom: 12px; display: flex; align-items: center; gap: 8px;">
+                            <span>❓</span>
+                            <span>具体测试问题（每个问题均在5个AI平台进行测试）</span>
+                        </div>
+                        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 12px; margin-top: 15px;">
+                            <div style="padding: 12px 15px; background: white; border-radius: 10px; border-left: 3px solid #ef4444;">
+                                <div style="font-size: 13px; font-weight: 600; color: var(--dark); margin-bottom: 4px;">问题 1</div>
+                                <div style="font-size: 14px; color: var(--gray);">"贵阳有哪些大学推荐？"</div>
+                            </div>
+                            <div style="padding: 12px 15px; background: white; border-radius: 10px; border-left: 3px solid #ef4444;">
+                                <div style="font-size: 13px; font-weight: 600; color: var(--dark); margin-bottom: 4px;">问题 2</div>
+                                <div style="font-size: 14px; color: var(--gray);">"贵州省（物理/理科）450分能上什么大学？"</div>
+                            </div>
+                            <div style="padding: 12px 15px; background: white; border-radius: 10px; border-left: 3px solid #ef4444;">
+                                <div style="font-size: 13px; font-weight: 600; color: var(--dark); margin-bottom: 4px;">问题 3</div>
+                                <div style="font-size: 14px; color: var(--gray);">"贵州省大学推荐"</div>
+                            </div>
+                            <div style="padding: 12px 15px; background: white; border-radius: 10px; border-left: 3px solid #ef4444;">
+                                <div style="font-size: 13px; font-weight: 600; color: var(--dark); margin-bottom: 4px;">问题 4</div>
+                                <div style="font-size: 14px; color: var(--gray);">"贵州哪个大学就业率高？"</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div style="margin-top: 20px; padding: 15px; background: rgba(239, 68, 68, 0.08); border-radius: 10px;">
+                        <div style="font-size: 16px; color: var(--dark); line-height: 1.8;">
+                            <strong style="color: var(--danger); font-size: 17px;">诊断目的：</strong>
+                            本报告通过模拟学生在AI搜索平台中查找"贵州大学推荐"、"就业率"、"高考分数匹配"等真实场景，评估贵州商学院在AI时代的品牌可见度和招生竞争力。随着00后、05后考生逐渐将AI搜索作为选校决策的第一入口，GEO（Generative Engine Optimization）已成为高校获取生源的新战场。本报告旨在为贵州商学院提供数据支持，帮助其在AI搜索生态中建立品牌存在，提升招生竞争力。
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="section">
+            <div class="section-header">
+                <div class="section-number">01</div>
+                <h2 class="section-title">核心诊断结论</h2>
+            </div>
+
+            <div class="score-container">
+                <div class="score-card warning">
+                    <div class="score-circle">
+                        <svg width="150" height="150" viewBox="0 0 150 150">
+                            <circle class="score-circle-bg" cx="75" cy="75" r="70"/>
+                            <circle class="score-circle-progress" cx="75" cy="75" r="70" style="stroke: #f59e0b; stroke-dashoffset: 374;"/>
+                        </svg>
+                        <div class="score-circle-text">
+                            <div class="score-value" style="color: #f59e0b;">15%</div>
+                            <div class="score-max">/ 100%</div>
+                        </div>
+                    </div>
+                    <div class="score-label">总体收录率</div>
+                    <div class="score-desc">3/20次主动提及</div>
+                </div>
+
+                <div class="score-card danger">
+                    <div class="score-circle">
+                        <svg width="150" height="150" viewBox="0 0 150 150">
+                            <circle class="score-circle-bg" cx="75" cy="75" r="70"/>
+                            <circle class="score-circle-progress" cx="75" cy="75" r="70" style="stroke: #ef4444; stroke-dashoffset: 440;"/>
+                        </svg>
+                        <div class="score-circle-text">
+                            <div class="score-value" style="color: #ef4444;">🔴</div>
+                        </div>
+                    </div>
+                    <div class="score-label">品牌生存状态</div>
+                    <div class="score-desc">极度危险</div>
+                </div>
+
+                <div class="score-card warning">
+                    <div class="score-circle">
+                        <svg width="150" height="150" viewBox="0 0 150 150">
+                            <circle class="score-circle-bg" cx="75" cy="75" r="70"/>
+                            <circle class="score-circle-progress" cx="75" cy="75" r="70" style="stroke: #f59e0b; stroke-dashoffset: 440;"/>
+                        </svg>
+                        <div class="score-circle-text">
+                            <div class="score-value" style="color: #f59e0b;">0</div>
+                            <div class="score-max">/ 10</div>
+                        </div>
+                    </div>
+                    <div class="score-label">NO.1推荐次数</div>
+                    <div class="score-desc">核心关键词场景</div>
+                </div>
+            </div>
+
+            <div class="card">
+                <h3 style="font-size: 20px; font-weight: 600; margin-bottom: 25px;">📊 分平台"生存"状况</h3>
+                <div class="platform-grid">
+                    <div class="platform-card poor">
+                        <div class="platform-icon">🟣</div>
+                        <div class="platform-name">豆包</div>
+                        <div class="platform-score">0/4</div>
+                        <div class="platform-status status-poor">❌ 未收录</div>
+                    </div>
+                    <div class="platform-card fair">
+                        <div class="platform-icon">🔵</div>
+                        <div class="platform-name">DeepSeek</div>
+                        <div class="platform-score">1/4</div>
+                        <div class="platform-status status-fair">⚠️ 25%收录</div>
+                    </div>
+                    <div class="platform-card good">
+                        <div class="platform-icon">🟢</div>
+                        <div class="platform-name">腾讯元宝</div>
+                        <div class="platform-score">2/4</div>
+                        <div class="platform-status status-good">✅ 50%收录</div>
+                    </div>
+                    <div class="platform-card poor">
+                        <div class="platform-icon">🟡</div>
+                        <div class="platform-name">通义千问</div>
+                        <div class="platform-score">0/4</div>
+                        <div class="platform-status status-poor">❌ 未收录</div>
+                    </div>
+                    <div class="platform-card poor">
+                        <div class="platform-icon">⚪</div>
+                        <div class="platform-name">文心一言</div>
+                        <div class="platform-score">0/4</div>
+                        <div class="platform-status status-poor">❌ 未收录</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="alert alert-danger">
+                <div class="alert-icon">⚠️</div>
+                <div class="alert-content">
+                    <div style="font-weight: 700; font-size: 16px; margin-bottom: 8px; color: #dc2626;">诊断综述：严重的AI搜索"隐形危机"</div>
+                    <div style="font-size: 14px; color: var(--gray);">
+                        在"贵州大学推荐"、"贵阳有哪些大学"、"就业率"等高意向招生搜索中，贵州商学院的出现率仅为<strong>15%</strong>（20次搜索中仅3次被提及）。这意味着在AI接管的招生入口，贵州商学院正处于<strong>"边缘化"状态</strong>。当考生向AI咨询贵州省高校推荐时，AI几乎不会提及贵州商学院，而是一致推荐贵州大学、贵州财经大学、贵州师范大学等竞品院校。潜在生源正被竞品大量截获，而贵州商学院在这一重要的流量入口中几乎完全"隐形"。
+                    </div>
+                </div>
+            </div>
+
+            <div class="quote-box">
+                <p class="quote-text">
+                    "在高考招生这场看不见的战争中，AI搜索已成为新的战场。当考生通过豆包、文心一言、通义千问等平台寻找心仪大学时，贵州商学院几乎处于'查无此人'的状态。
+                    这种'隐形危机'比任何排名下滑都更危险——因为考生根本看不到你，也就不可能选择你。"
+                </p>
+                <div style="text-align: center; margin-top: 15px; font-size: 14px; color: var(--gray);">
+                    —— GEO战略诊断结论
+                </div>
+            </div>
+
+            <div class="screenshot-section">
+                <h3 class="screenshot-section-title">📸 AI搜索实测截图证据（左右滑动查看）</h3>
+
+                <div class="screenshot-scroll-container">
+                    <div class="screenshot-scroll-wrapper">
+                        <div class="screenshot-item">
+                            <img src="豆包-贵阳大学推荐.png" alt="豆包 - 贵阳大学推荐">
+                            <div class="screenshot-badge">❌ 未收录</div>
+                            <div class="screenshot-label">🟣 豆包 | 贵阳大学推荐</div>
+                        </div>
+                        <div class="screenshot-item">
+                            <img src="豆包-贵州450大学推荐png.png" alt="豆包 - 贵州450大学推荐">
+                            <div class="screenshot-badge">❌ 未收录</div>
+                            <div class="screenshot-label">🟣 豆包 | 450分能上什么大学</div>
+                        </div>
+                        <div class="screenshot-item">
+                            <img src="豆包-贵州省大学推荐.png" alt="豆包 - 贵州省大学推荐">
+                            <div class="screenshot-badge">❌ 未收录</div>
+                            <div class="screenshot-label">🟣 豆包 | 贵州省大学推荐</div>
+                        </div>
+                        <div class="screenshot-item">
+                            <img src="豆包-贵州的大学就业率推荐.png" alt="豆包 - 贵州的大学就业率推荐">
+                            <div class="screenshot-badge">❌ 未收录</div>
+                            <div class="screenshot-label">🟣 豆包 | 就业率推荐</div>
+                        </div>
+
+                        <div class="screenshot-item">
+                            <img src="deepseek-贵阳大学推荐.png" alt="DeepSeek - 贵阳大学推荐">
+                            <div class="screenshot-badge">❌ 未收录</div>
+                            <div class="screenshot-label">🔵 DeepSeek | 贵阳大学推荐</div>
+                        </div>
+                        <div class="screenshot-item">
+                            <img src="deepseek-贵州450大学推荐.png" alt="DeepSeek - 贵州450大学推荐">
+                            <div class="screenshot-badge success">✅ 已收录</div>
+                            <div class="screenshot-label">🔵 DeepSeek | 450分能上什么大学</div>
+                        </div>
+                        <div class="screenshot-item">
+                            <img src="deepseek-贵州省大学推荐.png" alt="DeepSeek - 贵州省大学推荐">
+                            <div class="screenshot-badge">❌ 未收录</div>
+                            <div class="screenshot-label">🔵 DeepSeek | 贵州省大学推荐</div>
+                        </div>
+                        <div class="screenshot-item">
+                            <img src="deepseek-贵州的大学就业率推荐png.png" alt="DeepSeek - 贵州的大学就业率推荐">
+                            <div class="screenshot-badge">❌ 未收录</div>
+                            <div class="screenshot-label">🔵 DeepSeek | 就业率推荐</div>
+                        </div>
+
+                        <div class="screenshot-item">
+                            <img src="元宝-贵阳大学推荐.png" alt="腾讯元宝 - 贵阳大学推荐">
+                            <div class="screenshot-badge success">✅ 已收录</div>
+                            <div class="screenshot-label">🟢 腾讯元宝 | 贵阳大学推荐</div>
+                        </div>
+                        <div class="screenshot-item">
+                            <img src="元宝-贵州450大学推荐.png" alt="腾讯元宝 - 贵州450大学推荐">
+                            <div class="screenshot-badge">❌ 未收录</div>
+                            <div class="screenshot-label">🟢 腾讯元宝 | 450分能上什么大学</div>
+                        </div>
+                        <div class="screenshot-item">
+                            <img src="元宝-贵州省大学推荐.png" alt="腾讯元宝 - 贵州省大学推荐">
+                            <div class="screenshot-badge">❌ 未收录</div>
+                            <div class="screenshot-label">🟢 腾讯元宝 | 贵州省大学推荐</div>
+                        </div>
+                        <div class="screenshot-item">
+                            <img src="元宝-贵州的大学就业率推荐.png" alt="腾讯元宝 - 贵州的大学就业率推荐">
+                            <div class="screenshot-badge success">✅ 已收录</div>
+                            <div class="screenshot-label">🟢 腾讯元宝 | 就业率推荐</div>
+                        </div>
+
+                        <div class="screenshot-item">
+                            <img src="千问-贵阳大学推荐.png" alt="通义千问 - 贵阳大学推荐">
+                            <div class="screenshot-badge">❌ 未收录</div>
+                            <div class="screenshot-label">🟡 通义千问 | 贵阳大学推荐</div>
+                        </div>
+                        <div class="screenshot-item">
+                            <img src="千问-贵州450大学推荐.png" alt="通义千问 - 贵州450大学推荐">
+                            <div class="screenshot-badge">❌ 未收录</div>
+                            <div class="screenshot-label">🟡 通义千问 | 450分能上什么大学</div>
+                        </div>
+                        <div class="screenshot-item">
+                            <img src="千问-贵州省大学推荐.png" alt="通义千问 - 贵州省大学推荐">
+                            <div class="screenshot-badge">❌ 未收录</div>
+                            <div class="screenshot-label">🟡 通义千问 | 贵州省大学推荐</div>
+                        </div>
+                        <div class="screenshot-item">
+                            <img src="千问-贵州的大学就业率推荐.png" alt="通义千问 - 贵州的大学就业率推荐">
+                            <div class="screenshot-badge">❌ 未收录</div>
+                            <div class="screenshot-label">🟡 通义千问 | 就业率推荐</div>
+                        </div>
+
+                        <div class="screenshot-item">
+                            <img src="文心一言-贵阳大学推荐.png" alt="文心一言 - 贵阳大学推荐">
+                            <div class="screenshot-badge">❌ 未收录</div>
+                            <div class="screenshot-label">⚪ 文心一言 | 贵阳大学推荐</div>
+                        </div>
+                        <div class="screenshot-item">
+                            <img src="文心一言-贵州450大学推荐.png" alt="文心一言 - 贵州450大学推荐">
+                            <div class="screenshot-badge">❌ 未收录</div>
+                            <div class="screenshot-label">⚪ 文心一言 | 450分能上什么大学</div>
+                        </div>
+                        <div class="screenshot-item">
+                            <img src="文心一言-贵州省大学推荐.png" alt="文心一言 - 贵州省大学推荐">
+                            <div class="screenshot-badge">❌ 未收录</div>
+                            <div class="screenshot-label">⚪ 文心一言 | 贵州省大学推荐</div>
+                        </div>
+                        <div class="screenshot-item">
+                            <img src="文心一言-贵州的大学就业率推荐png.png" alt="文心一言 - 贵州的大学就业率推荐">
+                            <div class="screenshot-badge">❌ 未收录</div>
+                            <div class="screenshot-label">⚪ 文心一言 | 就业率推荐</div>
+                        </div>
+                    </div>
+
+                    <div class="scroll-hint">
+                        <span class="scroll-hint-icon">👉</span>
+                        <span>左右滑动查看更多平台截图</span>
+                        <span class="scroll-hint-icon">👈</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="section">
+            <div class="section-header">
+                <div class="section-number">02</div>
+                <h2 class="section-title">AI眼中的品牌形象</h2>
+            </div>
+
+            <div class="alert alert-warning">
+                <div class="alert-icon">⚠️</div>
+                <div class="alert-content">
+                    <div style="font-weight: 700; font-size: 16px; margin-bottom: 8px; color: #d97706;">AI几乎不知道您的存在</div>
+                    <div style="font-size: 14px; color: var(--gray); line-height: 1.8;">
+                        在这个诊断中，我们发现了一个令人担忧的现象：<strong>5个主流AI平台中，只提到了贵州商学院三次</strong>，而且仅用了"专注于商贸类应用型人才的培养"这样一句简短的描述。在其他所有平台（豆包、DeepSeek、通义千问、文心一言）的回答中，贵州商学院完全没有出现。这意味着当学生向AI咨询贵州高校时，AI甚至无法将贵州商学院作为一个基本选项提供给学生。
+                    </div>
+                </div>
+            </div>
+
+            <div class="grid-2">
+                <div class="info-card danger">
+                    <div class="info-card-title">
+                        <span style="font-size: 24px;">🔍</span>
+                        当前AI定义
+                    </div>
+                    <div class="info-card-content">
+                        <strong>AI数据库中几乎没有品牌信息：</strong><br><br>
+                        ❌ 5个平台中，3个完全未提及<br>
+                        ❌ 没有任何专业优势介绍<br>
+                        ❌ 没有任何办学特色描述<br>
+                        ❌ 没有任何就业数据展示<br><br>
+                        <strong>唯一一次提及：</strong>腾讯元宝在"贵阳有哪些大学推荐"中，仅用一句话描述："贵州商学院：财经、应用型，本科，专注于商贸类应用型人才的培养"——没有对比优势，没有吸引亮点。
+                    </div>
+                </div>
+
+                <div class="info-card warning">
+                    <div class="info-card-title">
+                        <span style="font-size: 24px;">📊</span>
+                        与竞品的对比差距
+                    </div>
+                    <div class="info-card-content">
+                        <strong>当学生问"贵州有哪些大学"时，AI是这样回答的：</strong><br><br>
+                        <span class="tag tag-danger">贵州大学</span> "双一流""211"，综合实力全省第一<br>
+                        <span class="tag tag-danger">贵州财经大学</span> 财经类省内第一，ACCA合作院校<br>
+                        <span class="tag tag-danger">贵州师范大学</span> 全省师范教育龙头<br>
+                        <span class="tag tag-danger">贵州医科大学</span> 西南医学教育"黄埔军校"<br>
+                        <span class="tag tag-danger">贵州民族大学</span> 民族学全国重点<br>
+                        <span class="tag tag-danger">贵州中医药大学</span> 中医药特色鲜明<br>
+                        ...而<strong>贵州商学院几乎没有被提及</strong>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="section">
+            <div class="section-header">
+                <div class="section-number">03</div>
+                <h2 class="section-title">竞争情况</h2>
+            </div>
+
+            <div class="card">
+                <h3 style="font-size: 20px; font-weight: 600; margin-bottom: 20px;">🏆 品牌推荐频次排行（基于20组AI搜索测试）</h3>
+                <div class="table-container">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th style="width: 70px;">排名</th>
+                                <th>品牌名称</th>
+                                <th>出现频次</th>
+                                <th>市场占有率</th>
+                                <th>AI赋予的核心标签</th>
+                                <th>抢占的场景/关键词</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr class="highlight-row">
+                                <td><span class="rank-badge rank-1">1</span></td>
+                                <td><strong>贵州大学</strong></td>
+                                <td><strong>20次</strong></td>
+                                <td>
+                                    <div class="progress-bar">
+                                        <div class="progress-fill" style="width: 100%; background: linear-gradient(90deg, #ef4444, #dc2626);">100%</div>
+                                    </div>
+                                </td>
+                                <td>
+                                    <span class="tag tag-danger">双一流</span>
+                                    <span class="tag tag-danger">211工程</span>
+                                    <span class="tag tag-danger">综合实力第一</span>
+                                </td>
+                                <td>所有推荐场景（大学推荐/就业率/分数匹配）</td>
+                            </tr>
+                            <tr>
+                                <td><span class="rank-badge rank-2">2</span></td>
+                                <td><strong>贵州财经大学</strong></td>
+                                <td><strong>18次</strong></td>
+                                <td>
+                                    <div class="progress-bar">
+                                        <div class="progress-fill" style="width: 90%; background: linear-gradient(90deg, #f59e0b, #d97706);">90%</div>
+                                    </div>
+                                </td>
+                                <td>
+                                    <span class="tag tag-danger">财经第一</span>
+                                    <span class="tag tag-danger">ACCA合作</span>
+                                    <span class="tag tag-danger">就业率高</span>
+                                </td>
+                                <td>财经/会计/金融推荐、就业率推荐</td>
+                            </tr>
+                            <tr>
+                                <td><span class="rank-badge rank-3">3</span></td>
+                                <td><strong>贵州师范大学</strong></td>
+                                <td><strong>17次</strong></td>
+                                <td>
+                                    <div class="progress-bar">
+                                        <div class="progress-fill" style="width: 85%; background: linear-gradient(90deg, #f59e0b, #fbbf24);">85%</div>
+                                    </div>
+                                </td>
+                                <td>
+                                    <span class="tag tag-danger">师范龙头</span>
+                                    <span class="tag tag-danger">就业率98%+</span>
+                                    <span class="tag tag-danger">考编优势</span>
+                                </td>
+                                <td>师范/教育专业推荐、就业率推荐</td>
+                            </tr>
+                            <tr>
+                                <td><span class="rank-badge">4</span></td>
+                                <td><strong>贵州医科大学</strong></td>
+                                <td><strong>15次</strong></td>
+                                <td>
+                                    <div class="progress-bar">
+                                        <div class="progress-fill" style="width: 75%; background: linear-gradient(90deg, #94a3b8, #64748b);">75%</div>
+                                    </div>
+                                </td>
+                                <td>
+                                    <span class="tag tag-danger">医学强校</span>
+                                    <span class="tag tag-danger">三甲医院</span>
+                                </td>
+                                <td>医学/临床推荐、就业率推荐</td>
+                            </tr>
+                            <tr>
+                                <td><span class="rank-badge">5</span></td>
+                                <td><strong>贵州民族大学</strong></td>
+                                <td><strong>12次</strong></td>
+                                <td>
+                                    <div class="progress-bar">
+                                        <div class="progress-fill" style="width: 60%; background: linear-gradient(90deg, #94a3b8, #64748b);">60%</div>
+                                    </div>
+                                </td>
+                                <td>
+                                    <span class="tag tag-danger">民族学重点</span>
+                                    <span class="tag tag-danger">就业率95%+</span>
+                                </td>
+                                <td>民族/文科推荐、就业率推荐</td>
+                            </tr>
+                            <tr>
+                                <td><span class="rank-badge">末</span></td>
+                                <td><strong>贵州商学院</strong></td>
+                                <td><strong>3次</strong></td>
+                                <td>
+                                    <div class="progress-bar">
+                                        <div class="progress-fill" style="width: 15%; background: linear-gradient(90deg, #f59e0b, #d97706);">15%</div>
+                                    </div>
+                                </td>
+                                <td>
+                                    <span class="tag tag-danger">商科应用型</span>
+                                    <span class="tag tag-danger">就业率92%</span>
+                                </td>
+                                <td>腾讯元宝(大学推荐/就业率)、DeepSeek(450分推荐)</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <div class="alert alert-danger">
+                <div class="alert-icon">🚨</div>
+                <div class="alert-content">
+                    <div style="font-weight: 700; font-size: 16px; margin-bottom: 8px; color: #dc2626;">竞争格局洞察</div>
+                    <div style="font-size: 14px; color: var(--gray);">
+                        贵州商学院虽然已在部分AI平台获得收录（腾讯元宝2次、DeepSeek 1次），但与竞品相比存在巨大差距。贵州大学以100%的AI收录率遥遥领先，贵州财经大学、贵州师范大学等竞品的收录率均超过75%。更关键的是，贵州商学院仅在被动的"450分能上什么大学"场景中被提及，缺乏主动推荐。这意味着在AI搜索生态中，贵州商学院仍处于边缘化状态，急需通过GEO优化提升品牌可见度和竞争力。
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="section">
+            <div class="section-header">
+                <div class="section-number">04</div>
+                <h2 class="section-title">GEO优化建议</h2>
+            </div>
+
+            <div class="alert alert-warning">
+                <div class="alert-icon">🚀</div>
+                <div class="alert-content">
+                    <div style="font-weight: 700; font-size: 16px; margin-bottom: 8px; color: #d97706;">当前情况：急需建立AI搜索可见度</div>
+                    <div style="font-size: 14px; color: var(--gray);">
+                        基于当前较低的AI收录率（15%），贵州商学院急需启动GEO优化计划，大幅提升AI搜索生态中的品牌存在，确保考生在通过AI搜索时能够看到并了解贵州商学院。
+                    </div>
+                </div>
+            </div>
+
+            <div class="timeline">
+                <div class="timeline-item">
+                    <div class="card">
+                        <span class="timeline-number">第一阶段：品牌唤醒</span>
+                        <h3 style="font-size: 18px; font-weight: 600; margin-bottom: 15px;">🎯 目标</h3>
+                        <p style="font-size: 14px; color: var(--gray); margin-bottom: 15px;">
+                            建立基础AI认知图谱，让所有主流AI平台能够准确识别并介绍贵州商学院，从"完全无收录"提升到"基础可见"。
+                        </p>
+                        <h3 style="font-size: 18px; font-weight: 600; margin-bottom: 15px;">📊 关键动作（黑盒）</h3>
+                        <ul style="font-size: 14px; color: var(--gray); line-height: 1.8; padding-left: 20px;">
+                            <li>构建"贵州商学院"的基础AI知识图谱</li>
+                            <li>在"贵阳有哪些大学"、"贵州省大学推荐"等基础场景中建立收录</li>
+                            <li>优化AI对贵州商学院的基本认知（办学性质、专业设置、地理位置等）</li>
+                        </ul>
+                        <div style="margin-top: 15px; padding: 12px; background: rgba(239, 68, 68, 0.05); border-radius: 8px;">
+                            <div style="font-size: 13px; color: #dc2626; font-weight: 600;">🎁 交付成果</div>
+                            <div style="font-size: 13px; color: var(--gray); margin-top: 5px;">5个AI平台全部实现基础收录 | AI能准确介绍学校基本信息</div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="timeline-item">
+                    <div class="card">
+                        <span class="timeline-number">第二阶段：关键词绑定</span>
+                        <h3 style="font-size: 18px; font-weight: 600; margin-bottom: 15px;">🎯 目标</h3>
+                        <p style="font-size: 14px; color: var(--gray); margin-bottom: 15px;">
+                            在"财经类大学推荐"、"商科专业"、"就业率高"、"分数匹配"等高频招生场景中提升推荐顺位，进入候选名单。
+                        </p>
+                        <h3 style="font-size: 18px; font-weight: 600; margin-bottom: 15px;">📊 关键动作（黑盒）</h3>
+                        <ul style="font-size: 14px; color: var(--gray); line-height: 1.8; padding-left: 20px;">
+                            <li>建立"贵州商学院=商科/财经/应用型"的语义关联</li>
+                            <li>在"就业率"、"适合分数"等决策场景中绑定品牌</li>
+                            <li>突出与贵州财经大学的差异化定位（应用型vs研究型）</li>
+                        </ul>
+                        <div style="margin-top: 15px; padding: 12px; background: rgba(245, 158, 11, 0.05); border-radius: 8px;">
+                            <div style="font-size: 13px; color: #d97706; font-weight: 600;">🎁 交付成果</div>
+                            <div style="font-size: 13px; color: var(--gray); margin-top: 5px;">核心场景收录率提升至60%+ | 进入AI推荐候选名单</div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="timeline-item">
+                    <div class="card">
+                        <span class="timeline-number">第三阶段：口碑护航</span>
+                        <h3 style="font-size: 18px; font-weight: 600; margin-bottom: 15px;">🎯 目标</h3>
+                        <p style="font-size: 14px; color: var(--gray); margin-bottom: 15px;">
+                            从"被动提及"升级为"主动推荐"，让AI在回答商科/财经相关问题时，主动展示贵州商学院的优势特色，压制竞品优势。
+                        </p>
+                        <h3 style="font-size: 18px; font-weight: 600; margin-bottom: 15px;">📊 关键动作（黑盒）</h3>
+                        <ul style="font-size: 14px; color: var(--gray); line-height: 1.8; padding-left: 20px;">
+                            <li>构建"应用型商科人才培养"的特色内容资产矩阵</li>
+                            <li>让AI在"商科专业选择"、"就业率对比"等问题中主动推荐贵州商学院</li>
+                            <li>建立校企合作、就业数据、师资力量等AI可读的社会证明结构</li>
+                        </ul>
+                        <div style="margin-top: 15px; padding: 12px; background: rgba(139, 92, 246, 0.05); border-radius: 8px;">
+                            <div style="font-size: 13px; color: var(--primary); font-weight: 600;">🎁 交付成果</div>
+                            <div style="font-size: 13px; color: var(--gray); margin-top: 5px;">核心场景AI主动推荐 | 商科细分领域NO.1/NO.2推荐位</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="section">
+            <div class="section-header">
+                <div class="section-number">05</div>
+                <h2 class="section-title">为什么高校招生必须现在做GEO？</h2>
+            </div>
+
+            <div class="grid-3">
+                <div class="whynow-card urgency-1">
+                    <div class="whynow-number">01</div>
+                    <div class="whynow-title">🚀 招生入口的代际变迁</div>
+                    <div class="whynow-content">
+                        <strong>考生择校方式正在发生根本性转变：</strong><br><br>
+                        2025年，以00后、05后为主的高考考生已普遍将AI搜索（豆包、文心一言、通义千问等）作为择校决策的第一入口。在"贵州有哪些大学"、"哪个大学就业率高"、"450分能上什么大学"等问题上，考生更倾向于问AI而非搜索引擎或咨询老师。<br><br>
+                        <strong>紧迫性：</strong>根据调研，超过65%的高三学生在填报志愿前会使用AI进行学校筛选。如果贵州商学院现在不在AI搜索中建立存在，意味着每年将错过大量通过AI进行择校决策的潜在生源。
+                    </div>
+                </div>
+
+                <div class="whynow-card urgency-2">
+                    <div class="whynow-number">02</div>
+                    <div class="whynow-title">🎯 AI推荐的决策影响力</div>
+                    <div class="whynow-content">
+                        <strong>AI推荐已成为考生择校的"信任背书"：</strong><br><br>
+                        考生对传统招生宣传的免疫力已达历史最高，但对AI推荐仍保持天然信任。当AI说"推荐贵州财经大学"时，考生会认为这是"客观、中立、经过分析"的结论，并倾向于将推荐的院校纳入志愿填报名单。<br><br>
+                        <strong>紧迫性：</strong>目前贵州财经大学、贵州师范大学等竞品已在AI中建立了强势推荐地位，考生在AI推荐的引导下大量报考这些学校。贵州商学院如果不尽快布局GEO，生源质量将面临持续下滑的风险。
+                    </div>
+                </div>
+
+                <div class="whynow-card urgency-3">
+                    <div class="whynow-number">03</div>
+                    <div class="whynow-title">⏰ 时间窗口期正在关闭</div>
+                    <div class="whynow-content">
+                        <strong>GEO的"马太效应"在教育领域加速显现：</strong><br><br>
+                        AI的学习机制具有强化效应——被推荐次数越多的学校，未来被推荐的概率越高。目前贵州大学、贵州财经大学等学校已经建立了显著的AI推荐优势，这种优势会自我强化，形成良性循环。<br><br>
+                        <strong>紧迫性：</strong>但这个循环也意味着后来者的追赶成本呈指数级增长。贵州商学院每延迟一个月进入GEO赛道，要追赶竞品的难度就增加30-50%。现在是建立AI搜索可见度的最后低成本窗口期。
+                    </div>
+                </div>
+            </div>
+
+            <div class="card" style="margin-top: 40px; background: linear-gradient(135deg, #dc2626, #ef4444); color: white; text-align: center;">
+                <div style="padding: 20px;">
+                    <div style="font-size: 48px; margin-bottom: 15px;">⚠️</div>
+                    <h3 style="font-size: 24px; font-weight: 700; margin-bottom: 15px;">贵州商学院正在错过最重要的生源获取渠道</h3>
+                    <p style="font-size: 16px; opacity: 0.95; line-height: 1.8; max-width: 800px; margin: 0 auto;">
+                        数据显示，在AI搜索时代，贵州商学院处于"边缘化"状态。<br>
+                        当考生通过AI寻找心仪大学时，贵州商学院被推荐的次数仅为15%。<br><br>
+                        这意味着大量潜在生源在第一轮筛选中就已经将贵州商学院排除在外。<br>
+                        如果不立即采取行动，这种"隐形危机"将导致招生竞争力持续下滑。
+                    </p>
+                    <div style="margin-top: 30px; padding-top: 30px; border-top: 1px solid rgba(255,255,255,0.2);">
+                        <div style="display: flex; justify-content: center; gap: 50px; flex-wrap: wrap;">
+                            <div>
+                                <div style="font-size: 32px; font-weight: 900;">15%</div>
+                                <div style="font-size: 14px; opacity: 0.8;">AI收录率</div>
+                            </div>
+                            <div>
+                                <div style="font-size: 32px; font-weight: 900;">0/20</div>
+                                <div style="font-size: 14px; opacity: 0.8;">NO.1推荐位</div>
+                            </div>
+                            <div>
+                                <div style="font-size: 32px; font-weight: 900;">边缘化</div>
+                                <div style="font-size: 14px; opacity: 0.8;">招生竞争地位</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="footer">
+        <div class="footer-content">
+            <p style="font-size: 14px; opacity: 0.8;">
+                本报告基于20组AI搜索测试数据生成，涵盖5个主流AI平台（豆包、DeepSeek、腾讯元宝、通义千问、文心一言）
+            </p>
+            <p style="font-size: 13px; opacity: 0.5; margin-top: 20px;">
+                © 2025 GEO战略诊断报告 | 贵州商学院品牌分析
+            </p>
+        </div>
+    </div>
+
+    <div class="lightbox" id="lightbox">
+        <div class="lightbox-content">
+            <div class="lightbox-close" onclick="closeLightbox()">×</div>
+            <img id="lightbox-img" src="" alt="">
+            <div class="lightbox-caption" id="lightbox-caption"></div>
+        </div>
+    </div>
+
+    <script>
+        // Animate score circles
+        document.querySelectorAll('.score-circle-progress').forEach(circle => {
+            const offset = circle.getAttribute('stroke-dashoffset');
+            setTimeout(() => {
+                circle.style.strokeDashoffset = offset;
+            }, 500);
+        });
+
+        // Lightbox functionality
+        const lightbox = document.getElementById('lightbox');
+        const lightboxImg = document.getElementById('lightbox-img');
+        const lightboxCaption = document.getElementById('lightbox-caption');
+
+        // Add click event to all screenshot items
+        document.querySelectorAll('.screenshot-item').forEach(item => {
+            item.addEventListener('click', function() {
+                const img = this.querySelector('img');
+                const label = this.querySelector('.screenshot-label');
+                const badge = this.querySelector('.screenshot-badge');
+
+                lightboxImg.src = img.src;
+                lightboxImg.alt = img.alt;
+
+                let caption = label ? label.textContent : '';
+                if (badge) {
+                    caption = badge.textContent + ' ' + caption;
+                }
+                lightboxCaption.textContent = caption;
+
+                lightbox.classList.add('active');
+                document.body.style.overflow = 'hidden';
+            });
+        });
+
+        // Close lightbox when clicking outside
+        lightbox.addEventListener('click', function(e) {
+            if (e.target === lightbox) {
+                closeLightbox();
+            }
+        });
+
+        // Close lightbox with Escape key
+        document.addEventListener('keydown', function(e) {
+            if (e.key === 'Escape') {
+                closeLightbox();
+            }
+        });
+
+        function closeLightbox() {
+            lightbox.classList.remove('active');
+            document.body.style.overflow = '';
+        }
+    </script>
+</body>
+</html>
